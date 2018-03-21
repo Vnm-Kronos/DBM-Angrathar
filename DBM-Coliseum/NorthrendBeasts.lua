@@ -308,7 +308,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerCombatStart:Show(15)
 		updateHealthFrame(2)
 		if self.Options.RangeFrame then
-			DBM.RangeCheck:Show(10, nil, true, nil, reverse)
+			DBM.RangeCheck:Show(10)
 		end
 	elseif msg == L.Phase3 or msg:find(L.Phase3) then
 		updateHealthFrame(3)

@@ -114,9 +114,9 @@ function mod:OnCombatStart(delay)
 	activeBeacons = false
 	if self.Options.RangeFrame then
 		if mod:IsDifficulty("heroic10") or mod:IsDifficulty("heroic25") then
-			DBM.RangeCheck:Show(20, GetRaidTargetIndex, true, nil, reverse)
+			DBM.RangeCheck:Show(20, GetRaidTargetIndex)
 		else
-			DBM.RangeCheck:Show(10, GetRaidTargetIndex, true, nil, reverse)
+			DBM.RangeCheck:Show(10, GetRaidTargetIndex)
 		end
 	end
 end

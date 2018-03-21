@@ -127,7 +127,7 @@ end
 
 function mod:RangeToggle(show)
 	if show then
-		DBM.RangeCheck:Show(11, nil, true, nil, false)
+		DBM.RangeCheck:Show(11)
 	else
 		DBM.RangeCheck:Hide()
 	end

@@ -95,8 +95,7 @@ local BLIP_TEX_COORDS = {
 }
 ---------------------
 --  Dropdown Menu  --
----------------------
-
+---------------------	
 -- todo: this dropdown menu is somewhat ugly and unflexible....
 do
 	local sound0 = "none"
@@ -613,7 +612,7 @@ do
 			return
 		end
 		activeRange = mainFrame.range
-		local restricted = mainFrame.restrictions
+		local restricted = areRestrictionsActive()
 		local tEnabled = textFrame.isShown
 		local rEnabled = radarFrame.isShown
 		if tEnabled then
@@ -867,6 +866,13 @@ end
 ---------------
 --  Methods  --
 ---------------
+function areRestrictionsActive()
+	if DBM.MapSizes[GetMapInfo()] then
+		return false
+	end
+	return true
+end
+
 local restoreRange, restoreFilter, restoreThreshold, restoreReverse = nil, nil, nil, nil
 function rangeCheck:Show(range, filter, forceshow, redCircleNumPlayers, reverse, hideTime)
 	if (GetNumGroupMembers() < 2 or DBM.Options.DontShowRangeFrame) and not forceshow then return end
@@ -878,10 +884,7 @@ function rangeCheck:Show(range, filter, forceshow, redCircleNumPlayers, reverse,
 	textFrame = textFrame or createTextFrame()
 	radarFrame = radarFrame or createRadarFrame()
 	--local restrictionsActive = nil --DBM:HasMapRestrictions()
-	local restrictionsActive = true
-	if DBM.MapSizes[GetMapInfo()] then
-		restrictionsActive = nil
-	end
+	local restrictionsActive = areRestrictionsActive()
 	if (DBM.Options.RangeFrameFrames == "text" or DBM.Options.RangeFrameFrames == "both" or restrictionsActive) and not textFrame.isShown then
 		if restrictionsActive then
 			if range <= 5 then

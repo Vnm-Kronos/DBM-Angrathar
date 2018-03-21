@@ -73,7 +73,7 @@ function mod:OnCombatStart(delay)
 	activePrince = nil
 	table.wipe(glitteringSparksTargets)
 	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(12, nil, true, nil, reverse)
+		DBM.RangeCheck:Show(12)
 	end
 end
 

@@ -42,7 +42,7 @@ function mod:OnCombatStart(delay)
 	enrageTimer:Start(-delay)
 	timerAchieve:Start(-delay)
 	table.wipe(guids)
-	timerVortexCD:Start(40) --10man timer
+	timerVortexCD:Start(40-delay) --10man timer
 end
 
 function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg)

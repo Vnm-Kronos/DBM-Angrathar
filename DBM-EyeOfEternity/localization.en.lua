@@ -29,7 +29,7 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	YellPull	= "My patience has reached its limit. I will be rid of you!",
+	YellPull	= "My patience has reached it's limit, I will be rid of you!",
 	EmoteSpark	= "A Power Spark forms from a nearby rift!",
 	YellPhase2	= "I had hoped to end your lives quickly",
 	EmoteBreath	= "%s takes a deep breath.",

@@ -46,7 +46,7 @@ function mod:OnCombatStart(delay)
 	table.wipe(brandTargets)
 	brandIcon = 8
 	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(12, nil, true, nil, reverse)
+		DBM.RangeCheck:Show(12)
 	end
 end
 

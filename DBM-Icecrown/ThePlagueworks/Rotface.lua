@@ -64,7 +64,7 @@ function mod:OnCombatStart(delay)
 	if mod:IsDifficulty("heroic10") or mod:IsDifficulty("heroic25") then
 		timerVileGasCD:Start(22-delay)
 		if self.Options.RangeFrame then
-			DBM.RangeCheck:Show(8, nil, true, nil, reverse)
+			DBM.RangeCheck:Show(8)
 		end
 	end
 end

@@ -53,7 +53,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			SendChatMessage(L.YellWebWrap, "YELL")
 		end
 	elseif args:IsSpellID(29484, 54125) then --Web Spray
-		warnWebSprayNow:Show()
 		if mod:IsDifficulty("heroic25") then
 			warnWebSpraySoon:Schedule(25)
 			timerWebSpray:Start()
@@ -63,20 +62,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	end
 end
---[[
-function mod:SPELL_CAST_SUCCESS(args)
-	if args:IsSpellID(29484, 54125) then -- Web Spray
-		warnWebSprayNow:Show()
-		warnWebSpraySoon:Schedule(25)
-		timerWebSpray:Start()
-		--warnSpidersSoon:Schedule(25)
-		--warnSpidersNow:Schedule(30)
-		--timerSpider:Start()
-    elseif args:IsSpellID(28622) then
-		timerCocoon:Start()
-	end
-end
---]]
+
 function mod:Spiderlings()
 	timerSpider:Start()
 	self:ScheduleMethod(40, "Spiderlings")

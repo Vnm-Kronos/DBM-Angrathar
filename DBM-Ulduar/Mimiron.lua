@@ -86,7 +86,7 @@ function mod:OnCombatStart(delay)
 		lootmethod, _, masterlooterRaidID = GetLootMethod()
 	end
 	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(6, nil, true, nil, reverse)
+		DBM.RangeCheck:Show(6)
 	end
 end
 

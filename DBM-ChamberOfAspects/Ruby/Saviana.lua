@@ -44,7 +44,7 @@ function mod:OnCombatStart(delay)
 	table.wipe(beaconTargets)
 	beaconIcon = 8
 	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(10, nil, true, nil, reverse)
+		DBM.RangeCheck:Show(10)
 	end
 end
 

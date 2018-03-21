@@ -93,7 +93,7 @@ function mod:OnCombatStart(delay)
 	lastGoo = 0
 	warnedfailed = false
 	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(8, nil, true, nil, reverse)
+		DBM.RangeCheck:Show(8)
 	end
 	if mod:IsDifficulty("heroic10") or mod:IsDifficulty("heroic25") then
 		timerGooCD:Start(13-delay)

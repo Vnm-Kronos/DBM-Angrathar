@@ -70,7 +70,7 @@ function mod:OnCombatStart(delay)
 	table.wipe(pactTargets)
 	pactIcons = 6
 	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(8, nil, true, nil, reverse)
+		DBM.RangeCheck:Show(8)
 	end
 	if mod:IsDifficulty("normal10") or mod:IsDifficulty("heroic10") then
 		timerNextInciteTerror:Start(124-delay)

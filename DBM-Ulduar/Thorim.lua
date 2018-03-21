@@ -39,7 +39,7 @@ function mod:OnCombatStart(delay)
 	enrageTimer:Start()
 	timerHardmode:Start()
 	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(10, nil, true, nil, reverse)
+		DBM.RangeCheck:Show(10)
 	end
 	table.wipe(lastcharge) 
 end
