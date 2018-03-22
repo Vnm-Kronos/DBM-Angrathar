@@ -38,10 +38,7 @@ mod:SetBossHealthInfo(
 	15930, L.Boss1,
 	15929, L.Boss2
 )
-function thaddtest()
-	warnStomp:Show()
-	timerStomp:Start()
-end
+
 local currentCharge
 local phase2
 local down = 0

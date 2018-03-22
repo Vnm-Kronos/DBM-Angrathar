@@ -54,10 +54,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(29484, 54125) then --Web Spray
 		if mod:IsDifficulty("heroic25") then
-			warnWebSpraySoon:Schedule(25)
 			timerWebSpray:Start()
 		else
-			warnWebSpraySoon:Schedule(35)
 			timerWebSpray:Start(40)
 		end
 	end
