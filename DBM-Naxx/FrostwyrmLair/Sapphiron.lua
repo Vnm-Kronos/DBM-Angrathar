@@ -46,6 +46,9 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if	args:IsSpellID(28522) and args:IsPlayer() and self.Options.WarningIceblock then
 		SendChatMessage(L.WarningYellIceblock, "YELL")
+	elseif args:IsSpellID(45185) then
+		warnStomp:Show()
+		timerStomp:Start()
 	end
 end
 
@@ -54,9 +57,6 @@ function mod:SPELL_CAST_SUCCESS(args)
 		warnDrainLifeNow:Show()
 		warnDrainLifeSoon:Schedule(18.5)
 		timerDrainLife:Start()
-	elseif args:IsSpellID(45185) then
-		warnStomp:Show()
-		timerStomp:Start()
 	end
 end
 

@@ -13,7 +13,7 @@ mod:RegisterEvents(
 	"SPELL_CAST_START",
 	"CHAT_MSG_RAID_BOSS_EMOTE",
 	"UNIT_AURA",
-	"SPELL_CAST_SUCCESS"
+	"SPELL_AURA_APPLIED"
 )
 
 local warnShiftCasting		= mod:NewCastAnnounce(28089, 3)
@@ -118,7 +118,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg)
 	end
 end
 
-function mod:SPELL_CAST_SUCCESS(args)
+function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(45185) then
 		warnStomp:Show()
 		timerStomp:Start()

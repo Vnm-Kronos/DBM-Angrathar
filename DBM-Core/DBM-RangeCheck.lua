@@ -611,6 +611,11 @@ do
 			rangeCheck:Hide()
 			return
 		end
+		SetMapToCurrentZone()
+		if mainFrame.currentZone ~= GetMapInfo() or mainFrame.currentLevel ~=GetCurrentMapDungeonLevel() then
+			rangeCheck:Hide(true)
+			return
+		end
 		activeRange = mainFrame.range
 		local restricted = areRestrictionsActive()
 		local tEnabled = textFrame.isShown
@@ -643,7 +648,7 @@ do
 			local uId = unitList[i]
 			local dot = dots[i]
 			local mapId = GetCurrentMapDungeonLevel() or playerMapId
-			if UnitExists(uId) and playerMapId == mapId and not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and UnitIsConnected(uId) and (not filter or filter(uId)) then
+			if UnitExists(uId) and playerMapId == mapId and not UnitIsUnit(uId, "player") and not UnitIsDeadOrGhost(uId) and UnitIsConnected(uId) and UnitIsVisible(uId) and (not filter or filter(uId)) then
 				local range--Juset set to a number in case any api fails and returns nil
 				if restricted then--API restrictions are in play, so pretend we're back in BC
 					--Start at bottom and work way up.
@@ -691,9 +696,6 @@ do
 						playerX, playerY = GetPlayerMapPosition("player")
 					end
 					local x, y = GetPlayerMapPosition(uId)
-					if not UnitIsVisible(uId) then
-						return
-					end
 					local mapName = GetMapInfo()
 					local dims  = DBM.MapSizes[mapName] and DBM.MapSizes[mapName][GetCurrentMapDungeonLevel()]
 					if not dims then
@@ -930,6 +932,8 @@ function rangeCheck:Show(range, filter, forceshow, redCircleNumPlayers, reverse,
 	mainFrame.reverse = reverse
 	mainFrame.hideTime = hideTime and (GetTime() + hideTime) or 0
 	mainFrame.restrictions = restrictionsActive
+	mainFrame.currentZone = GetMapInfo()
+	mainFrame.currentLevel = GetCurrentMapDungeonLevel()
 	if not mainFrame.eventRegistered then
 		mainFrame.eventRegistered = true
 		updateIcon()
