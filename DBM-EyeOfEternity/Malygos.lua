@@ -95,8 +95,12 @@ function mod:SPELL_AURA_APPLIED(args)
 				specWarnSurge:Show()
 			end
 		end
-	elseif args:IsSpellID(56263) then --10man timer
-		timerVortexCD:Start(80)
+	elseif args:IsSpellID(56263) then
+		if mod:IsDifficulty("heroic25") then
+			timerVortexCD:Start()
+		else
+			timerVortexCD:Start(80)
+		end
 	end
 end
 
