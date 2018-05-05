@@ -76,6 +76,14 @@ local dims
 --local GetTime = GetTime
 --local CheckInteractDistance, IsItemInRange, UnitInRange = CheckInteractDistance, IsItemInRange, UnitInRange
 local max, sin, cos, pi, pi2 = math.max, math.sin, math.cos, math.pi, math.pi * 2
+local function GetNumGroupMembers()
+	local rm = GetNumRaidMembers()
+	return (rm > 0 and rm) or GetNumPartyMembers()
+end
+local function IsInRaid()
+	return GetNumRaidMembers() > 0
+end
+
 
 -- for Phanx' Class Colors
 local RAID_CLASS_COLORS = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
