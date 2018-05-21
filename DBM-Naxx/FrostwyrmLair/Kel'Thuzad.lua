@@ -49,7 +49,9 @@ function mod:OnCombatStart(delay)
 	warnedAdds = false
 	specwarnP2Soon:Schedule(215-delay)
 	timerPhase2:Start()
-	timerMindControl:Start(317)
+	if mod:IsDifficulty("heroic25") then
+		timerMindControl:Start(317)
+	end
 	warnPhase2:Schedule(225)
 	--self:Schedule(225, DBM.RangeCheck.Show, DBM.RangeCheck, 11)
 end
@@ -127,7 +129,7 @@ end
 
 function mod:RangeToggle(show)
 	if show then
-		DBM.RangeCheck:Show(11)
+		DBM.RangeCheck:Show(12)
 	else
 		DBM.RangeCheck:Hide()
 	end

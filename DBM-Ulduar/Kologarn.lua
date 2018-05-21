@@ -13,7 +13,8 @@ mod:RegisterEvents(
 	"SPELL_AURA_REMOVED",
 	"SPELL_DAMAGE",
 	"CHAT_MSG_RAID_BOSS_WHISPER",
-	"UNIT_DIED"
+	--"UNIT_DIED",
+	"CHAT_MSG_MONSTER_YELL"
 )
 
 mod:SetBossHealthInfo(
@@ -30,10 +31,11 @@ local specWarnCrunchArmor2		= mod:NewSpecialWarningStack(64002, false, 2)
 local specWarnEyebeam			= mod:NewSpecialWarningYou(63346)
 
 local timerCrunch10             = mod:NewTargetTimer(6, 63355)
-local timerNextShockwave		= mod:NewCDTimer(18, 63982)
-local timerRespawnLeftArm		= mod:NewTimer(48, "timerLeftArm")
-local timerRespawnRightArm		= mod:NewTimer(48, "timerRightArm")
-local timerTimeForDisarmed		= mod:NewTimer(10, "achievementDisarmed")	-- 10 HC / 12 nonHC
+local timerNextOverheadSmash	= mod:NewCDTimer(15, 64003)
+local timerNextShockwave		= mod:NewCDTimer(30, 63982)
+local timerRespawnLeftArm		= mod:NewTimer(45, "timerLeftArm")
+local timerRespawnRightArm		= mod:NewTimer(45, "timerRightArm")
+local timerTimeForDisarmed		= mod:NewTimer(12, "achievementDisarmed")	
 
 -- 5/23 00:33:48.648  SPELL_AURA_APPLIED,0x0000000000000000,nil,0x80000000,0x0480000001860FAC,"Hâzzad",0x4000512,63355,"Crunch Armor",0x1,DEBUFF
 -- 6/3 21:41:56.140 UNIT_DIED,0x0000000000000000,nil,0x80000000,0xF1500080A60274A0,"Rechter Arm",0xa48 
@@ -44,23 +46,27 @@ mod:AddBoolOption("PlaySoundOnEyebeam", true)
 mod:AddBoolOption("SetIconOnEyebeamTarget", true)
 mod:AddBoolOption("YellOnBeam", true, "announce")
 
-function mod:UNIT_DIED(args)
-	if self:GetCIDFromGUID(args.destGUID) == 32934 then 		-- right arm
-		timerRespawnRightArm:Start()
-		if mod:IsDifficulty("heroic10") then
-			timerTimeForDisarmed:Start(12)
-		else
-			timerTimeForDisarmed:Start()
-		end
-	elseif self:GetCIDFromGUID(args.destGUID) == 32933 then		-- left arm
-		timerRespawnLeftArm:Start()
-		if mod:IsDifficulty("heroic10") then
-			timerTimeForDisarmed:Start(12)
-		else
-			timerTimeForDisarmed:Start()
-		end
-	end
+function mod:OnCombatStart(delay)
+	timerNextOverheadSmash:Start(8)
+	timerNextOverheadSmash:Schedule(8)
+	self:ScheduleMethod(23, "OverheadSmash")
 end
+
+function mod:OverheadSmash()
+	timerNextOverheadSmash:Start(28)
+	self:ScheduleMethod(28, "OverheadSmash")
+end
+
+--function mod:UNIT_DIED(args)
+--	if self:GetCIDFromGUID(args.destGUID) == 32934 then 		-- right arm
+--		timerRespawnRightArm:Start()
+--		timerTimeForDisarmed:Start()
+--
+--	elseif self:GetCIDFromGUID(args.destGUID) == 32933 then		-- left arm
+--		timerRespawnLeftArm:Start()
+--		timerTimeForDisarmed:Start()
+--	end
+--end
 
 function mod:SPELL_DAMAGE(args)
 	if args:IsSpellID(63783, 63982) and args:IsPlayer() then	-- Shockwave
@@ -134,4 +140,17 @@ function mod:SPELL_AURA_REMOVED(args)
 	if args:IsSpellID(64290, 64292) then
 		self:SetIcon(args.destName, 0)
     end
+end
+
+function mod:CHAT_MSG_MONSTER_YELL(msg)
+	if (msg == L.YellEncounterStart or msg:find(L.YellEncounterStart)) then --timer for first Shockwave
+		timerNextShockwave:Start(18)
+	elseif (msg == L.YellLeftArmDies or msg:find(L.YellLeftArmDies)) then  --left arm dies
+		timerNextShockwave:Stop()
+		timerTimeForDisarmed:Start()
+		timerRespawnLeftArm:Start()
+	elseif (msg == L.YellRightArmDies or msg:find(L.YellRightArmDies)) then --right arm dies
+		timerTimeForDisarmed:Start()
+		timerRespawnRightArm:Start()
+	end
 end

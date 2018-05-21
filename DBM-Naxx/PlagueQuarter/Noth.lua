@@ -7,13 +7,15 @@ mod:SetCreatureID(15954)
 mod:RegisterCombat("combat")
 
 mod:RegisterEvents(
-	"SPELL_CAST_SUCCESS"
+	"SPELL_CAST_SUCCESS",
+	"SPELL_AURA_APPLIED"
 )
 
 local warnTeleportNow	= mod:NewAnnounce("WarningTeleportNow", 3, 46573)
 local warnTeleportSoon	= mod:NewAnnounce("WarningTeleportSoon", 1, 46573)
 local warnCurse			= mod:NewSpellAnnounce(29213, 2)
 
+local timerBlink		= mod:NewNextTimer(30, 29208)
 local timerTeleport		= mod:NewTimer(110, "TimerTeleport", 46573)
 local timerTeleportBack	= mod:NewTimer(70, "TimerTeleportBack", 46573)
 
@@ -22,6 +24,9 @@ local phase = 0
 function mod:OnCombatStart(delay)
 	phase = 0
 	self:BackInRoom(delay)
+	if mod:IsDifficulty("heroic25") then
+		timerBlink:Start(25 - delay)
+	end
 end
 
 function mod:Balcony()
@@ -34,6 +39,7 @@ function mod:Balcony()
 	warnTeleportSoon:Schedule(timer - 20)
 	warnTeleportNow:Schedule(timer)
 	self:ScheduleMethod(timer, "BackInRoom")
+	timerBlink:Stop()
 end
 
 function mod:BackInRoom(delay)
@@ -48,10 +54,19 @@ function mod:BackInRoom(delay)
 	warnTeleportSoon:Schedule(timer - 20)
 	warnTeleportNow:Schedule(timer)
 	self:ScheduleMethod(timer, "Balcony")
+	if mod:IsDifficulty("heroic25") then
+		timerBlink:Start(25 - delay)
+	end
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(29213, 54835) then	-- Curse of the Plaguebringer
 		warnCurse:Show()
+	end
+end
+
+function mod:SPELL_AURA_APPLIED(args)
+	if args:IsSpellID(29208) then -- Blink
+		timerBlink:Start()
 	end
 end

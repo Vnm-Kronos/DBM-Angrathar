@@ -4,7 +4,8 @@ local L		= mod:GetLocalizedStrings()
 mod:SetRevision(("$Revision: 4133 $"):sub(12, -3))
 
 mod:SetCreatureID(33515)
-mod:RegisterCombat("combat")
+--mod:RegisterCombat("combat")
+mod:RegisterCombat("yell", L.YellPull)
 
 mod:RegisterEvents(
 	"SPELL_CAST_START",
@@ -34,11 +35,11 @@ local specWarnBlast		= mod:NewSpecialWarning("SpecWarnBlast", canInterrupt)
 local specWarnVoid 		= mod:NewSpecialWarningMove(64675)
 
 local enrageTimer		= mod:NewBerserkTimer(600)
-local timerDefender 	= mod:NewTimer(35, "timerDefender")
+local timerDefender 	= mod:NewTimer(30, "timerDefender")
 local timerFear			= mod:NewCastTimer(64386)
-local timerNextFear 	= mod:NewNextTimer(35.5, 64386)
-local timerNextSwarm 	= mod:NewNextTimer(36, 64396)
-local timerNextSonic 	= mod:NewNextTimer(27, 64688)
+local timerNextFear 	= mod:NewNextTimer(35, 64386)
+local timerNextSwarm 	= mod:NewNextTimer(40, 64396)
+local timerNextSonic 	= mod:NewNextTimer(50, 64688)
 local timerSonic		= mod:NewCastTimer(64688)
 
 mod:AddBoolOption("HealthFrame", true)
@@ -49,9 +50,9 @@ local catLives = 9
 function mod:OnCombatStart(delay)
 	catLives = 9
 	enrageTimer:Start(-delay)
-	timerNextFear:Start(40-delay)
-	timerNextSonic:Start(60-delay)
-	timerDefender:Start(60-delay)
+	timerNextFear:Start(35-delay) 
+	timerNextSonic:Start(45-delay) 
+	timerDefender:Start(60-delay) 
 end
 
 function mod:SPELL_CAST_START(args)
@@ -61,7 +62,7 @@ function mod:SPELL_CAST_START(args)
 		warnFear:Show()
 		timerFear:Start()
 		timerNextFear:Schedule(2)
-		warnFearSoon:Schedule(34)
+		warnFearSoon:Schedule(37)
 	elseif args:IsSpellID(64688, 64422) then --Sonic Screech
 		warnSonic:Show()
 		timerSonic:Start()
@@ -103,6 +104,7 @@ function mod:UNIT_DIED(args)
 				DBM.BossHealth:AddBoss(34035, L.Defender:format(catLives))
 			end
 		else
+			print("else 1")
 			if self.Options.HealthFrame then
 				DBM.BossHealth:RemoveBoss(34035)
 			end

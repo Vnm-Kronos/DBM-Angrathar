@@ -23,14 +23,14 @@ local warnDevouringFlameCast		= mod:NewAnnounce("WarnDevouringFlameCast", 2, 647
 local specWarnDevouringFlame		= mod:NewSpecialWarningMove(64733)
 local specWarnDevouringFlameCast	= mod:NewSpecialWarning("SpecWarnDevouringFlameCast")
 
-local enrageTimer					= mod:NewBerserkTimer(900)
-local timerDeepBreathCooldown		= mod:NewCDTimer(21, 64021)
+local enrageTimer					= mod:NewBerserkTimer(420)
+local timerDeepBreathCooldown		= mod:NewCDTimer(15, 64021)
 local timerDeepBreathCast			= mod:NewCastTimer(2.5, 64021)
 local timerTurret1					= mod:NewTimer(53, "timerTurret1", 48642)
 local timerTurret2					= mod:NewTimer(73, "timerTurret2", 48642)
 local timerTurret3					= mod:NewTimer(93, "timerTurret3", 48642)
 local timerTurret4					= mod:NewTimer(113, "timerTurret4", 48642)
-local timerGrounded                 = mod:NewTimer(45, "timerGrounded")
+local timerGrounded                 = mod:NewTimer(39, "timerGrounded")
 
 mod:AddBoolOption("PlaySoundOnDevouringFlame", false)
 
@@ -41,17 +41,17 @@ function mod:OnCombatStart(delay)
 	enrageTimer:Start(-delay)
 	combattime = GetTime()
 	if mod:IsDifficulty("heroic10") then
-		warnTurretsReadySoon:Schedule(53-delay)
-		warnTurretsReady:Schedule(73-delay)
+		warnTurretsReadySoon:Schedule(48-delay)
+		warnTurretsReady:Schedule(68-delay)
 		timerTurret1:Start(-delay)
 		timerTurret2:Start(-delay)
 	else
 		warnTurretsReadySoon:Schedule(93-delay)
 		warnTurretsReady:Schedule(113-delay)
-		timerTurret1:Start(-delay) -- 53sec
-		timerTurret2:Start(-delay) -- +20
-		timerTurret3:Start(-delay) -- +20
-		timerTurret4:Start(-delay) -- +20
+		timerTurret1:Start(-delay) 
+		timerTurret2:Start(-delay) 
+		timerTurret3:Start(-delay) 
+		timerTurret4:Start(-delay) 
 	end
 end
 
@@ -79,17 +79,17 @@ end
 function mod:CHAT_MSG_MONSTER_YELL(msg, mob)
 	if (msg == L.YellAir or msg == L.YellAir2) and GetTime() - combattime > 30 then
 		if mod:IsDifficulty("heroic10") then -- not sure?
-			warnTurretsReadySoon:Schedule(23)
-			warnTurretsReady:Schedule(43)
-			timerTurret1:Start(23)
-			timerTurret2:Start(43)
+			warnTurretsReadySoon:Schedule(38)
+			warnTurretsReady:Schedule(58)
+			timerTurret1:Start(30)
+			timerTurret2:Start(58)
 		else
 			warnTurretsReadySoon:Schedule(93)
 			warnTurretsReady:Schedule(113)
-			timerTurret1:Start()
-			timerTurret2:Start()
-			timerTurret3:Start()
-			timerTurret4:Start()
+			timerTurret1:Start(53)
+			timerTurret2:Start(73)
+			timerTurret3:Start(93)
+			timerTurret4:Start(113)
 		end
 
 	elseif msg == L.YellGround then

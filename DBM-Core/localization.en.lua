@@ -69,14 +69,15 @@ DBM_CORE_RANGECHECK_SOUND_2			= "Annoying beep"
 DBM_CORE_RANGECHECK_HIDE			= "Hide"
 DBM_CORE_RANGECHECK_SETRANGE_TO		= "%d yd"
 DBM_CORE_RANGECHECK_LOCK			= "Lock frame"
-DBM_CORE_RANGECHECK_SETTHRESHOLD	= "Set player threshold"
 DBM_CORE_RANGECHECK_OPTION_FRAMES	= "Frames"
 DBM_CORE_RANGECHECK_OPTION_RADAR	= "Show radar frame"
 DBM_CORE_RANGECHECK_OPTION_TEXT		= "Show text frame"
 DBM_CORE_RANGECHECK_OPTION_BOTH		= "Show both frames"
-DBM_CORE_RANGERADAR_HEADER			= "Range:%d Players:%d"
-DBM_CORE_RANGERADAR_IN_RANGE_TEXT	= "%d in range (%dyd)"--Multi
-DBM_CORE_RANGERADAR_IN_RANGE_TEXTONE= "%s (%0.1fyd)"--One target
+DBM_CORE_RANGECHECK_OPTION_SPEED	= "Update Rate (Reload Req.)"
+DBM_CORE_RANGECHECK_OPTION_SLOW		= "Slow (lowest CPU)"
+DBM_CORE_RANGECHECK_OPTION_AVERAGE	= "Medium"
+DBM_CORE_RANGECHECK_OPTION_FAST		= "Fast (Most real-time)"
+DBM_CORE_RANGERADAR_HEADER			= "Range Radar (%d yd)"
 
 DBM_LFG_INVITE						= "LFG Invite"
 
@@ -199,5 +200,3 @@ DBM_ARROW_ERROR_USAGE	= {
 	"/dbm arrow hide  hides the arrow",
 	"/dbm arrow move  makes the arrow movable",
 }
-
-

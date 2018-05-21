@@ -44,7 +44,7 @@
 DBM = {
 	Revision = ("$Revision: 4442 $"):sub(12, -3),
 	Version = "4.52",
-	DisplayVersion = "4.52", -- the string that is shown as version
+	DisplayVersion = "4.52 edited by Raf", -- the string that is shown as version
 	ReleaseRevision = 4442 -- the revision of the latest stable version that is available (for /dbm ver2)
 }
 
@@ -101,9 +101,13 @@ DBM.DefaultOptions = {
 	SpecialWarningFont = STANDARD_TEXT_FONT,
 	SpecialWarningFontSize = 50,
 	SpecialWarningFontColor = {0.0, 0.0, 1.0},
+	SpecialWarningFontColor2 = {r = 0.0, g = 1.0, b = 0.0},
 	HealthFrameGrowUp = false,
 	HealthFrameLocked = false,
 	HealthFrameWidth = 200,
+	HealthFrameHeight = 32,
+	HealthFrameBarTexture = "Interface\\PaperDollInfoFrame\\UI-Character-Skills-Bar",
+	HealthFrameBarBorder = "Interface\\PaperDollInfoFrame\\UI-Character-Skills-BarBorder",
 	ArrowPosX = 0,
 	ArrowPosY = -150,
 	ArrowPoint = "TOP",
@@ -264,9 +268,9 @@ do
 	local argsMT = {__index = {}}
 	local args = setmetatable({}, argsMT)
 	
-	function argsMT.__index:IsSpellID(a1, a2, a3, a4)
+	function argsMT.__index:IsSpellID(a1, a2, a3, a4, a5, a6, a7, a8)
 		local v = self.spellId
-		return v == a1 or v == a2 or v == a3 or v == a4
+		return v == a1 or v == a2 or v == a3 or v == a4 or v == a5 or v == a6 or v == a7 or v == a8
 	end
 	
 	function argsMT.__index:IsPlayer()
@@ -794,41 +798,6 @@ SlashCmdList["DEADLYBOSSMODS"] = function(msg)
 	end
 end
 
-	local function updateRangeFrame(r, reverse)
-		if DBM.RangeCheck:IsShown() then
-			DBM.RangeCheck:Hide(true)
-		else
-			--if DBM:HasMapRestrictions() then
-			--	DBM:AddMsg(DBM_CORE_NO_RANGE)
-			--if IsInInstance() then
-			--	DBM:AddMsg(DBM_CORE_NO_RANGE_SOON)
-			--end
-			if r and (r < 201) then
-				DBM.RangeCheck:Show(r, nil, true, nil, reverse)
-			else
-				DBM.RangeCheck:Show(10, nil, true, nil, reverse)
-			end
-		end
-	end
-	SLASH_DBMRANGE1 = "/range"
-	SLASH_DBMRANGE2 = "/distance"
-	SLASH_DBMHUDAR1 = "/hudar"
-	SLASH_DBMRRANGE1 = "/rrange"
-	SLASH_DBMRRANGE2 = "/rdistance"
-	SlashCmdList["DBMRANGE"] = function(msg)
-		local r = tonumber(msg) or 10
-		updateRangeFrame(r, false)
-	end
-	SlashCmdList["DBMHUDAR"] = function(msg)
-		local r = tonumber(msg) or 10
-		DBMHudMap:ToggleHudar(r)
-	end
-	SlashCmdList["DBMRRANGE"] = function(msg)
-		local r = tonumber(msg) or 10
-		updateRangeFrame(r, true)
-	end
-
---[[
 SLASH_DBMRANGE1 = "/range"
 SLASH_DBMRANGE2 = "/distance"
 SlashCmdList["DBMRANGE"] = function(msg)
@@ -843,7 +812,6 @@ SlashCmdList["DBMRANGE"] = function(msg)
 		end
 	end
 end
-]]
 
 do
 	local sortMe = {}
@@ -2498,11 +2466,21 @@ end
 -- returns heroic for old instances that do not have a heroic mode (Naxx, Ulduar...)
 function bossModPrototype:GetDifficulty() 
 	local _, instanceType, difficulty, _, _, playerDifficulty, isDynamicInstance = GetInstanceInfo()
+	--if instanceType == "raid" and isDynamicInstance then -- "new" instance (ICC)
+	--	if difficulty == 1 then -- 10 men
+	--		return playerDifficulty == 0 and "normal10" or playerDifficulty == 1 and "heroic10" or "unknown"
+	--	elseif difficulty == 2 then -- 25 men
+	--		return playerDifficulty == 0 and "normal25" or playerDifficulty == 1 and "heroic25" or "unknown"
+	--	end
 	if instanceType == "raid" and isDynamicInstance then -- "new" instance (ICC)
 		if difficulty == 1 then -- 10 men
-			return playerDifficulty == 0 and "normal10" or playerDifficulty == 1 and "heroic10" or "unknown"
+			return playerDifficulty == 0 and "normal10" or "unknown"
 		elseif difficulty == 2 then -- 25 men
-			return playerDifficulty == 0 and "normal25" or playerDifficulty == 1 and "heroic25" or "unknown"
+			return playerDifficulty == 0 and "normal25" or "unknown"
+		elseif difficulty == 3 then -- 10 men hc
+			return playerDifficulty == 1 and "heroic10" or "unknown"
+		elseif difficulty == 4 then -- 25 men hc
+			return playerDifficulty == 1 and "heroic25" or "unknown"
 		end
 	else -- support for "old" instances
 		if GetInstanceDifficulty() == 1 then 
@@ -2704,6 +2682,26 @@ do
 		table.insert(self.announces, obj)
 		return obj
 	end
+
+	function bossModPrototype:NewAnnounceCustom(text, color, icon, optionDefault, optionName)
+		local obj = setmetatable(
+			{
+				text = self.localization.warnings[text],
+				color = {r = 0.00, g = 1.00, b = 0.00},
+				option = optionName or text,
+				mod = self,
+				icon = (type(icon) == "number" and select(3, GetSpellInfo(icon))) or icon,
+			},
+			mt
+		)
+		if optionName == false then
+			obj.option = nil
+		else
+			self:AddBoolOption(optionName or text, optionDefault, "announce")
+		end
+		table.insert(self.announces, obj)
+		return obj
+	end
 	
 	-- new constructor (auto-localized warnings and options, yay!)
 	local function newAnnounce(self, announceType, spellId, color, icon, optionDefault, optionName, castTime, preWarnTime)
@@ -2876,13 +2874,14 @@ do
 		return unschedule(self.Show, self.mod, self, ...)
 	end
 
-	function bossModPrototype:NewSpecialWarning(text, optionDefault, optionName, noSound, runSound)
+	function bossModPrototype:NewSpecialWarning(text, optionDefault, optionName, noSound, runSound, color)		--color added
 		local obj = setmetatable(
 			{
 				text = self.localization.warnings[text], 
 				option = optionName or text,
 				mod = self,
 				sound = not noSound,
+				color = color,
 			},
 			mt
 		)
@@ -2891,13 +2890,18 @@ do
 		else
 			self:AddBoolOption(optionName or text, optionDefault, "announce")		
 		end
+		
 		table.insert(self.specwarns, obj)
 		return obj
 	end
 
-	local function newSpecialWarning(self, announceType, spellId, stacks, optionDefault, optionName, noSound, runSound)
+	local function newSpecialWarning(self, announceType, spellId, stacks, optionDefault, optionName, noSound, runSound, color)
 		spellName = GetSpellInfo(spellId) or "unknown"
-		local text = DBM_CORE_AUTO_SPEC_WARN_TEXTS[announceType]:format(spellName) 
+		local text = DBM_CORE_AUTO_SPEC_WARN_TEXTS[announceType]:format(spellName)
+		local colorPrefix = ("|cff%.2x%.2x%.2x"):format(DBM.Options.SpecialWarningFontColor2.r * 255, DBM.Options.SpecialWarningFontColor2.g * 255, DBM.Options.SpecialWarningFontColor2.b * 255)
+		if color == 2 then	-- colors
+			text = colorPrefix .. text .. "|r"
+		end
 		local obj = setmetatable( -- todo: fix duplicate code
 			{
 				text = text,
@@ -2905,9 +2909,11 @@ do
 				option = optionName or text,
 				mod = self,
 				sound = not noSound,
+				color = color,
 			},
 			mt
 		)
+		
 		if optionName == false then
 			obj.option = nil
 		else
@@ -3035,6 +3041,20 @@ do
 		self:Schedule(3, testWarningEnd)
 		frame.timer = 3
 	end
+	
+	function DBM:ShowTestSpecialWarning2(text)
+		if moving then
+			return
+		end
+		local colorPrefix = ("|cff%.2x%.2x%.2x"):format(DBM.Options.SpecialWarningFontColor2.r * 255, DBM.Options.SpecialWarningFontColor2.g * 255, DBM.Options.SpecialWarningFontColor2.b * 255)
+		font:SetText(colorPrefix .. DBM_CORE_MOVE_SPECIAL_WARNING_TEXT .. "|r")
+		frame:Show()
+		frame:SetAlpha(1)
+		frame:SetFrameStrata("TOOLTIP")
+		self:Unschedule(testWarningEnd)
+		self:Schedule(3, testWarningEnd)
+		frame.timer = 3
+	end
 end
 
 
@@ -3106,6 +3126,12 @@ do
 		local bar = DBM.Bars:GetBar(id)
 		return bar and (bar.totalTime - bar.timer) or 0, (bar and bar.totalTime) or 0
 	end
+
+	function timerPrototype:Time(...)
+		local id = self.id..pformat((("\t%s"):rep(select("#", ...))), ...)
+		local bar = DBM.Bars:GetBar(id)
+		return bar.totalTime or 0
+	end
 	
 	function timerPrototype:IsStarted(...)
 		local id = self.id..pformat((("\t%s"):rep(select("#", ...))), ...)
@@ -3123,6 +3149,14 @@ do
 		end
 		local id = self.id..pformat((("\t%s"):rep(select("#", ...))), ...)
 		return DBM.Bars:UpdateBar(id, elapsed, totalTime)
+	end
+
+	function timerPrototype:AddTime(time, ...) 
+		local id = self.id..pformat((("\t%s"):rep(select("#", ...))), ...)
+		local timer = self:GetTime(...) - time -- GetTime() = elapsed time on timer
+		if timer then
+			return DBM.Bars:UpdateBar(id, timer)
+		end
 	end
 
 	function timerPrototype:UpdateIcon(icon, ...)
