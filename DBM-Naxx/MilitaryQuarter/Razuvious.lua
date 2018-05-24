@@ -17,10 +17,12 @@ local warnShieldWall	= mod:NewAnnounce("WarningShieldWallSoon", 3, 29061)
 local timerShout		= mod:NewNextTimer(12, 55543)
 local timerTaunt		= mod:NewCDTimer(20, 29060)
 local timerShieldWall	= mod:NewCDTimer(20, 29061)
+local timerUnbalancingStrike = mod:NewNextTimer(30, 26613)
 
 function mod:OnCombatStart(delay)
 	timerShout:Start(16 - delay)
 	warnShoutSoon:Schedule(11 - delay)
+	timerUnbalancingStrike:Start(30 - delay)
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
@@ -33,6 +35,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif args:IsSpellID(29061) then -- ShieldWall
 		timerShieldWall:Start()
 		warnShieldWall:Schedule(15)
+	elseif args:IsSpellID(26613) then -- Unbalancing Strike
+		timerUnbalancingStrike:Start()
 	end
 end
 

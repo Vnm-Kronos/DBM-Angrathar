@@ -37,7 +37,7 @@ mod:AddBoolOption("RangeFrame")
 local lastcharge				= {} 
 
 function mod:OnCombatStart(delay)
-	enrageTimer:Start()
+	enrageTimerThorim:Start()
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Show(10)
 	end
@@ -95,13 +95,13 @@ end
 function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.YellPhase2 or msg:find(L.YellPhase2) then		-- Bossfight (tank and spank)
 		warnPhase2:Show()
-		enrageTimer:Stop()
+		enrageTimerThorim:Stop()
 		if (timerHardmodeThorim ~= nil) then
 			timerHardmodeThorim:Stop()
 		end
-		enrageTimer:Start(300)
+		enrageTimerThorim:Start(300)
 	elseif msg == L.YellKill or msg:find(L.YellKill) then
-		enrageTimer:Stop()
+		enrageTimerThorim:Stop()
 	end
 end
 
