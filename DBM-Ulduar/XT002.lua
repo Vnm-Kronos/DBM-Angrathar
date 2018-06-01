@@ -23,7 +23,7 @@ local specWarnConsumption			= mod:NewSpecialWarningMove(64206)	--Hard mode void 
 local specWarnTTIn10Sec 			= mod:NewSpecialWarning("WarningTTIn10Sec", 3)
 local enrageTimer
 if(mod:IsDifficulty("heroic10")) then
-	enrageTimer					= mod:NewBerserkTimer(480)
+	enrageTimer					= mod:NewBerserkTimer(600)
 else
 	enrageTimer					= mod:NewBerserkTimer(600)
 end
