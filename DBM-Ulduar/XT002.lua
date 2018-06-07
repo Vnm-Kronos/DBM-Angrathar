@@ -27,6 +27,7 @@ if(mod:IsDifficulty("heroic10")) then
 else
 	enrageTimer					= mod:NewBerserkTimer(600)
 end
+local lastTantrum					= 0
 
 local timerTympanicTantrumCast		= mod:NewCastTimer(62776)
 local timerTympanicTantrum			= mod:NewBuffActiveTimer(12, 62776)
@@ -54,7 +55,8 @@ function mod:SPELL_CAST_START(args)
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(62775) and args.auraType == "DEBUFF" then	-- Tympanic Tantrum
+	if args:IsSpellID(62775) and args.auraType == "DEBUFF" and GetTime() - lastTantrum > 14 then	-- Tympanic Tantrum
+		lastTantrum = GetTime()
 		timerTympanicTantrumCD:Start()
 		if self.Options.WarningTympanicTantrumIn10Sec then
 			specWarnTTIn10Sec:Schedule(49)
