@@ -12,7 +12,8 @@ mod:RegisterEvents(
 	"SPELL_AURA_APPLIED",
 	"CHAT_MSG_MONSTER_YELL",
 	"SPELL_CAST_SUCCESS",
-	"SPELL_DAMAGE"
+	"SPELL_DAMAGE",
+	"SPELL_CAST_START"
 )
 
 local warnPhase2				= mod:NewPhaseAnnounce(2, 1)
@@ -31,6 +32,10 @@ local timerStormhammerCD		= mod:NewCDTimer(14, 62042)
 local timerLightningCharge	 	= mod:NewCDTimer(10, 62279) 
 local timerUnbalancingStrike	= mod:NewCDTimer(20, 62130)
 local TimerHardmodeThorim		= mod:NewTimer(150, "TimerHardmodeThorim", 62042)
+local timerFrostNova			= mod:NewNextTimer(20, 62605)
+local timerFrostNovaCast		= mod:NewCastTimer(2.5, 62605)
+local timerChainLightning		= mod:NewNextTimer(15, 64390)
+local timerFBVolley				= mod:NewCDTimer(13, 62604)
 
 mod:AddBoolOption("RangeFrame")
 
@@ -88,6 +93,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerStormhammer:Schedule(2)
 	elseif args:IsSpellID(62130) then	-- Unbalancing Strike
 		timerUnbalancingStrike:Start()
+	elseif args:IsSpellID(62604) then	-- Frostbolt Volley by Sif
+		timerFBVolley:Start()
 	end
 end
 
@@ -118,5 +125,14 @@ function mod:SPELL_DAMAGE(args)
 	elseif self.Options.AnnounceFails and args:IsSpellID(62466) and DBM:GetRaidRank() >= 1 and DBM:GetRaidUnitId(args.destName) ~= "none" and args.destName then
 		lastcharge[args.destName] = (lastcharge[args.destName] or 0) + 1
 		SendChatMessage(L.ChargeOn:format(args.destName), "RAID")
+	end
+end
+
+function mod:SPELL_CAST_START(args)
+	if args:IsSpellID(62605) then --Frost Nova by Sif
+		timerFrostNovaCast:Start()
+		timerFrostNova:Start()
+	elseif args:IsSpellID(64390) then --Chain Lightning by Thorim
+		timerChainLightning:Start()
 	end
 end

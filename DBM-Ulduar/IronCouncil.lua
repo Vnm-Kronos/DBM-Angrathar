@@ -184,7 +184,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 		timerRuneofDeathCD:Start()
 		warnRuneofDeathIn10Sec:Schedule(25)
 	-- Steelbreaker dies
-	elseif (msg == L.YellSteelbreakerDied or msg:find(L.YellSteelbreakerDied) or msg == L.YellSteelbreakerDied2 or msg:find(L.YellSteelbreakerDied2)) then --register first RoD timer
+	elseif (msg == L.YellSteelbreakerDied or msg:find(L.YellSteelbreakerDied) or msg == L.YellSteelbreakerDied2 then --or msg:find(L.YellSteelbreakerDied2)) then register first RoD timer
 		steelbreakerAlive = false
 		if runemasterAlive and brundirAlive then
 			timerRuneofDeathCD:Start()
