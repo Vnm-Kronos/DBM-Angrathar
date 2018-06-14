@@ -35,6 +35,7 @@ local timerFrostBlast		= mod:NewNextTimer(30, 27808)
 
 mod:AddBoolOption("BlastAlarm", true)
 mod:AddBoolOption("ShowRange", true)
+mod:AddBoolOption("YellOnFissure", true, "announce")
 
 mod:SetBossHealthInfo(
 	15990, L.KelThuzad
@@ -109,6 +110,9 @@ function mod:SPELL_CAST_SUCCESS(args)
 			timerFissure:Start()
 		else
 			timerFissure:Start(25)
+		end
+		if self.Options.YellOnFissure and args.destName == UnitName("player") then
+			SendChatMessage(L.YellFissure, "SAY")
 		end
 	end
 	if args:IsSpellID(27808) then
