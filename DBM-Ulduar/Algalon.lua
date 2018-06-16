@@ -55,9 +55,15 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:startTimers()
-	enrageTimer:Start()
-	timerNextBigBang:Start(65)
-	announcePreBigBang:Schedule(65)
+	if mod:IsDifficulty("heroic10") then
+		enrageTimer:Start(360)
+		timerNextBigBang:Start(80)
+		announcePreBigBang:Schedule(70)
+	else
+		enrageTimer:Start()
+		timerNextBigBang:Start(65)
+		announcePreBigBang:Schedule(55)
+	end
 	timerCDCosmicSmash:Start(25)
 	timerNextCollapsingStar:Start(16.5)
 	timerNextPhasePunch:Start()
@@ -66,9 +72,14 @@ end
 function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(64584, 64443) then 	-- Big Bang
 		timerBigBangCast:Start()
-		timerNextBigBang:Start()
 		announceBigBang:Show()
-		announcePreBigBang:Schedule(80)
+		if mod:IsDifficulty("heroic10") then
+			timerNextBigBang:Start(90)
+			announcePreBigBang:Schedule(80)
+		else
+			timerNextBigBang:Start()
+			announcePreBigBang:Schedule(65)
+		end
 		specWarnBigBang:Show()
 	end
 end
