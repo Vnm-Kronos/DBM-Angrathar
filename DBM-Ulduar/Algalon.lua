@@ -57,8 +57,8 @@ end
 function mod:startTimers()
 	if mod:IsDifficulty("heroic10") then
 		enrageTimer:Start(360)
-		timerNextBigBang:Start(80)
-		announcePreBigBang:Schedule(70)
+		timerNextBigBang:Start(90)
+		announcePreBigBang:Schedule(80)
 	else
 		enrageTimer:Start()
 		timerNextBigBang:Start(65)
