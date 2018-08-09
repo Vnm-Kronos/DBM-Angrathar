@@ -43,7 +43,7 @@ local timerEonarsGiftCD     = mod:NewCDTimer(45, 62584)
 local timerIronRootsCD      = mod:NewCDTimer(40, 62439)
 
 local timerSunBeamCD		= mod:NewCDTimer(40, 62211) -- Hard mode Sun Beam
-local warnSunBeamSoon		= mod:NewSoonAnnounce(62211, 3) -- Hard mode Sun Beam
+local specWarnSunBeam3Sec	= mod:NewSpecialWarning("WarningSunBeamsIn3Sec", 3) -- Hard mode Sun Beam
 
 mod:AddBoolOption("HealthFrame", true)
 mod:AddBoolOption("PlaySoundOnFury")
@@ -61,7 +61,7 @@ function mod:OnCombatStart(delay)
     timerEonarsGiftCD:Start(30)
     self:ScheduleMethod(30, "EonarsGift")
 	timerSunBeamCD:Start()
-	warnSunBeamSoon:Schedule(37)
+	specWarnSunBeam3Sec:Schedule(37)
 end
 
 function mod:OnCombatEnd(wipe)
@@ -126,7 +126,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(62211) and args.sourceName == "Sun Beam" and GetTime() - lastBeam > 20 then
 		lastBeam = GetTime()
 		timerSunBeamCD:Start()
-		warnSunBeamSoon:Schedule(37)
+		specWarnSunBeam3Sec:Schedule(37)
     end 
 end
 

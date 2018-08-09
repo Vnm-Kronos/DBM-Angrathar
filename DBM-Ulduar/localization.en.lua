@@ -345,7 +345,8 @@ L:SetMiscLocalization{
 }
 
 L:SetWarningLocalization{
-	WarnSimulKill	= "First add down - Resurrection in ~12 seconds"
+	WarnSimulKill	= "First add down - Resurrection in ~12 seconds",
+	WarningSunBeamsIn3Sec = "Beams soon"
 }
 
 L:SetTimerLocalization{
