@@ -43,7 +43,7 @@ local timerEonarsGiftCD     = mod:NewCDTimer(45, 62584)
 local timerIronRootsCD      = mod:NewCDTimer(40, 62439)
 
 local timerSunBeamCD		= mod:NewCDTimer(40, 62211) -- Hard mode Sun Beam
-local specWarnSunBeam3Sec	= mod:NewSpecialWarning("WarningSunBeamsIn3Sec", 3) -- Hard mode Sun Beam
+local specWarnSunBeam3Sec	= mod:NewSpecialWarning("WarningBeamsSoon", 3) -- Hard mode Sun Beam
 
 mod:AddBoolOption("HealthFrame", true)
 mod:AddBoolOption("PlaySoundOnFury")
